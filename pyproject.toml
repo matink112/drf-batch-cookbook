@@ -1,0 +1,40 @@
+[project]
+name = "drf-batch-cookbook"
+version = "0.1.0"
+description = "Runnable scenarios for drf-batch's cached fields, one docs page each."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "drf-batch",
+    "Django>=5.2",
+    "djangorestframework>=3.15",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.9"]
+docs = [
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.5",
+]
+
+[tool.uv]
+package = false
+
+# The scenarios use drf-batch features that are not released yet (derived_from,
+# key=, BatchSerializer.cached): build against the sibling checkout. Switch to
+# a released version (or a git source) once they are published.
+[tool.uv.sources]
+drf-batch = { path = "../drf-batch", editable = true }
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["examples"]
+
+[tool.ruff.format]
+# The docs' code blocks are pymdownx snippet includes, not Python.
+exclude = ["docs/*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ANN", "RUF"]
+ignore = ["ANN401", "RUF012"]
