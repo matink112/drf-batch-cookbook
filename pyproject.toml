@@ -23,8 +23,8 @@ package = false
 ## The scenarios use drf-batch features that are not released yet (derived_from,
 ## key=, BatchSerializer.cached): build against the sibling checkout. Switch to
 ## a released version (or a git source) once they are published.
-#[tool.uv.sources]
-#drf-batch = { path = "../drf-batch", editable = true }
+[tool.uv.sources]
+drf-batch = { path = "../drf-batch", editable = true }
 
 [tool.ruff]
 line-length = 88

@@ -34,6 +34,13 @@ faked in each app's `services.py` with plain dicts, so everything runs
 offline. Requests run in a transaction (`ATOMIC_REQUESTS = True`), except the
 retry example, which opts out.
 
+## Real world
+
+[`real-world/command/`](real-world/command/) ports the execution-draft batch
+endpoint of `command` (the EMS order service drf-batch grew out of) to
+drf-batch: the serializer and view, plus a review of what changes and which
+drf-batch gaps it exposed. It is a design sketch, not run here.
+
 ## drf-batch version
 
 The scenarios use features that are not released yet (`derived_from`, `key=`,
