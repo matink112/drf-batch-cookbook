@@ -48,6 +48,6 @@ touch.
   client cannot tell "not yours" from "does not exist".
 - `self.context["request"]` is available in `get_queryset()`, as in DRF's
   `RelatedField`. For a fixed rule, pass `queryset=` instead, for example
-  `CachedRelatedField(queryset=Workspace.objects.filter(archived=False))`.
+  `BatchRelatedField(queryset=Workspace.objects.filter(archived=False))`.
 - Update/delete **targets** come from the view's `get_queryset()`, so another
   tenant's project is a **404**, never validated.

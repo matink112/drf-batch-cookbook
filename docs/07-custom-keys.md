@@ -8,7 +8,7 @@ collection, so every spelling resolves the same product with one query.
 | | |
 |---|---|
 | Domain | `shop` |
-| Options | a `CachedRelatedField` subclass with `prepare_key()`; `error=` |
+| Options | a `BatchRelatedField` subclass with `prepare_key()`; `error=` |
 | Run | `uv run python examples/run.py custom-keys` |
 
 ## Code
@@ -43,5 +43,5 @@ collection, so every spelling resolves the same product with one query.
   normalised (stored keys go through it too).
 - Calling `super().prepare_key()` keeps the built-in coercion and its 400 for
   lists, dicts and booleans, raised before any fetch.
-- The same hook exists on `CachedServiceField`, whose default
+- The same hook exists on `BatchServiceField`, whose default
   `prepare_key()` is the identity.

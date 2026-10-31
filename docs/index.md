@@ -1,6 +1,6 @@
 # drf-batch cookbook
 
-Nineteen scenarios for [drf-batch](https://matink112.github.io/drf-batch/) across six small domains. Each one shows a cached-field
+Nineteen scenarios for [drf-batch](https://matink112.github.io/drf-batch/) across six small domains. Each one shows a batch-field
 option (or two) doing a real job, with the code and the `POST` / `PATCH` /
 `PUT` / `DELETE` batches it handles. Everything on these pages is embedded
 from the runnable `examples/` project in this repository, whose walkthroughs
@@ -13,7 +13,7 @@ uv run python examples/run.py composite-keys   # one, by slug or number
 
 ## Where a key comes from
 
-Every row gets a key for every cached field before anything is fetched:
+Every row gets a key for every batch field before anything is fetched:
 
 | Field | Row sends it | Row omits it, `POST` | Row omits it, `PATCH` / `PUT` |
 |---|---|---|---|
@@ -22,7 +22,7 @@ Every row gets a key for every cached field before anything is fetched:
 
 Only a value the row **sent** can be a "not found" error. A derived or stored
 key the fetch does not return is for `validate()` to judge, through
-`self.cached(name)`.
+`self.fetched(name)`.
 
 ## Which page shows what
 
@@ -47,7 +47,7 @@ key the fetch does not return is for `validate()` to judge, through
 | derived from a derived field | chains | [13](13-chains.md) |
 | `depends_on=` | wait for another fetch's results | [9](09-derived-single.md), [13](13-chains.md), [14](14-fetch-order.md) |
 | stored keys (automatic) | `PATCH`/`PUT` rows that omit a field | [6](06-writable-service.md), [9](09-derived-single.md), [10](10-composite-keys.md), [16](16-put-replace.md) |
-| `self.cached(name)` | read a field's result in `validate()` | [5](05-non-fk-lookup.md), [6](06-writable-service.md), [9](09-derived-single.md)–[13](13-chains.md) |
+| `self.fetched(name)` | read a field's result in `validate()` | [5](05-non-fk-lookup.md), [6](06-writable-service.md), [9](09-derived-single.md)–[13](13-chains.md) |
 
 **View options**
 

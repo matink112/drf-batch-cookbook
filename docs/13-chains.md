@@ -9,7 +9,7 @@ another fetch's **results** (`depends_on`).
 | | |
 |---|---|
 | Domain | `logistics` |
-| Options | `derived_from` naming a cached field, `key=`, `depends_on=` |
+| Options | `derived_from` naming a batch field, `key=`, `depends_on=` |
 | Run | `uv run python examples/run.py chains` |
 
 ## Code

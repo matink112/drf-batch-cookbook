@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from drf_batch import BatchSerializer, CachedRelatedField, CachedServiceField
+from drf_batch import BatchRelatedField, BatchSerializer, BatchServiceField
 from rest_framework import serializers
 
 from .models import Reservation
@@ -11,12 +11,12 @@ from .services import STOCK, fetch_active_coupons
 
 # --8<-- [start:coupon]
 class CouponReservationSerializer(BatchSerializer):
-    warehouse = CachedRelatedField(lookup="code")
-    product = CachedRelatedField(lookup="sku")
+    warehouse = BatchRelatedField(lookup="code")
+    product = BatchRelatedField(lookup="sku")
     quantity = serializers.IntegerField(min_value=1)
     # Writable: a code the row sends must be active ("not active" otherwise).
     # A PATCH that leaves it out still sends the stored code to the service.
-    coupon_code = CachedServiceField(
+    coupon_code = BatchServiceField(
         fetch=fetch_active_coupons,
         error="Coupon '{value}' is not active.",
         required=False,
@@ -30,7 +30,11 @@ class CouponReservationSerializer(BatchSerializer):
         # A stored code the service no longer lists is not an automatic
         # error (the client did not send it): the serializer decides.
         stored = self.instance.coupon_code if self.instance is not None else ""
-        if "coupon_code" not in attrs and stored and self.cached("coupon_code") is None:
+        if (
+            "coupon_code" not in attrs
+            and stored
+            and self.fetched("coupon_code") is None
+        ):
             raise serializers.ValidationError(
                 {"coupon_code": [f"Coupon '{stored}' has ended; send a new one."]}
             )
@@ -41,7 +45,7 @@ class CouponReservationSerializer(BatchSerializer):
 
 
 # --8<-- [start:sku]
-class SkuField(CachedRelatedField):
+class SkuField(BatchRelatedField):
     """Accepts ``" ab_1 "`` for ``"AB-1"``: shop staff type SKUs by hand."""
 
     def prepare_key(self, value: Any) -> Any:
@@ -53,7 +57,7 @@ class SkuField(CachedRelatedField):
 
 
 class SkuReservationSerializer(BatchSerializer):
-    warehouse = CachedRelatedField(lookup="code")
+    warehouse = BatchRelatedField(lookup="code")
     product = SkuField(lookup="sku", error="Unknown SKU '{value}'.")
     quantity = serializers.IntegerField(min_value=1)
 
@@ -66,7 +70,7 @@ class SkuReservationSerializer(BatchSerializer):
 
 
 # --8<-- [start:stock]
-class StockLevelField(CachedServiceField):
+class StockLevelField(BatchServiceField):
     """A service field as a subclass: override ``fetch`` instead of ``fetch=``."""
 
     def fetch(self, keys: set[Any], collected: dict[str, Any], context: Any) -> Any:
@@ -75,8 +79,8 @@ class StockLevelField(CachedServiceField):
 
 
 class StockedReservationSerializer(BatchSerializer):
-    warehouse = CachedRelatedField(lookup="code")
-    product = CachedRelatedField(lookup="sku")
+    warehouse = BatchRelatedField(lookup="code")
+    product = BatchRelatedField(lookup="sku")
     quantity = serializers.IntegerField(min_value=1)
     # Keyed by the pair: each half is the row's value or, on a PATCH that
     # leaves it out, the stored one.
@@ -88,7 +92,7 @@ class StockedReservationSerializer(BatchSerializer):
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         quantity = attrs.get("quantity", getattr(self.instance, "quantity", 0))
-        available = self.cached("available") or 0
+        available = self.fetched("available") or 0
         if quantity > available:
             raise serializers.ValidationError(
                 {"quantity": [f"Only {available} in stock."]}
@@ -101,8 +105,8 @@ class StockedReservationSerializer(BatchSerializer):
 
 # --8<-- [start:plain]
 class ReservationSerializer(BatchSerializer):
-    warehouse = CachedRelatedField(lookup="code")
-    product = CachedRelatedField(lookup="sku")
+    warehouse = BatchRelatedField(lookup="code")
+    product = BatchRelatedField(lookup="sku")
     quantity = serializers.IntegerField(min_value=1)
 
     class Meta:

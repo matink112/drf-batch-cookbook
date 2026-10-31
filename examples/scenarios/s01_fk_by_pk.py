@@ -1,4 +1,4 @@
-"""1. FK by primary key: CachedRelatedField with no options."""
+"""1. FK by primary key: BatchRelatedField with no options."""
 
 from __future__ import annotations
 

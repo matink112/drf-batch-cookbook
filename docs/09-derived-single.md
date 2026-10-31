@@ -8,7 +8,7 @@ for the ticker **stored** on the order.
 | | |
 |---|---|
 | Domain | `trading` |
-| Options | `read_only=True`, `derived_from="ticker"`, `depends_on=("ticker",)`, `self.cached()` |
+| Options | `read_only=True`, `derived_from="ticker"`, `depends_on=("ticker",)`, `self.fetched()` |
 | Run | `uv run python examples/run.py derived-single` |
 
 ## Code
@@ -49,7 +49,7 @@ for the ticker **stored** on the order.
 - `depends_on=("ticker",)` is there because `fetch_bands` reads the **ticker
   rows** (their names). Because `band` reads `ticker`, the ticker lookup also
   covers the stored tickers.
-- `self.cached("band")` is this row's band. `attrs["ticker"]` would be a
+- `self.fetched("band")` is this row's band. `attrs["ticker"]` would be a
   `KeyError` on a `PATCH` that leaves the ticker out.
 - `read_only=True`: a `band` in the row is ignored. Clients cannot vouch for
   their own band.

@@ -51,5 +51,5 @@ keyed by that column (`derived_from`) checks it.
 - `derived_from="country_code"` keys the lookup by the column: the sent value
   or, on a `PATCH` that leaves it out, the stored one.
 - A derived key that misses is **not** an automatic error (the client did not
-  send it). `validate()` checks `self.cached("country")` and words the error
+  send it). `validate()` checks `self.fetched("country")` and words the error
   for the column the client knows.

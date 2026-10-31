@@ -1,7 +1,7 @@
 # 1. FK by primary key
 
 A library imports books in bulk. Each row names its author by primary key, a
-UUID here. A `CachedRelatedField` with **no options** resolves every author in
+UUID here. A `BatchRelatedField` with **no options** resolves every author in
 the batch with one query.
 
 | | |

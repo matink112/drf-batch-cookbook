@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from drf_batch import BatchSerializer, CachedRelatedField, CachedServiceField
+from drf_batch import BatchRelatedField, BatchSerializer, BatchServiceField
 from rest_framework import serializers
 
 from .models import Expense, Transfer
@@ -15,10 +15,10 @@ from .services import fetch_period_status, fetch_rates
 class TransferSerializer(BatchSerializer):
     # Two ForeignKeys to Currency, one "currency" map: every code in the
     # batch (from or to) is resolved by a single query.
-    from_currency = CachedRelatedField(
+    from_currency = BatchRelatedField(
         lookup="code", map="currency", error="Unknown currency '{value}'."
     )
-    to_currency = CachedRelatedField(
+    to_currency = BatchRelatedField(
         lookup="code", map="currency", error="Unknown currency '{value}'."
     )
     amount = serializers.DecimalField(
@@ -46,7 +46,7 @@ class TransferSerializer(BatchSerializer):
 # --8<-- [start:rated]
 class RatedTransferSerializer(TransferSerializer):
     # Keyed by the (from, to) codes: sent, or stored on a PATCH.
-    rate = CachedServiceField(
+    rate = BatchServiceField(
         fetch=fetch_rates,
         read_only=True,
         derived_from=("from_currency", "to_currency"),
@@ -57,7 +57,7 @@ class RatedTransferSerializer(TransferSerializer):
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         attrs = super().validate(attrs)
-        if self.cached("rate") is None:
+        if self.fetched("rate") is None:
             raise serializers.ValidationError("The treasury does not quote this pair.")
         return attrs
 
@@ -76,7 +76,7 @@ class ExpenseSerializer(BatchSerializer):
     amount = serializers.DecimalField(max_digits=12, decimal_places=2)
     category = serializers.CharField(max_length=32)
     # derived_from hands the field's *value* (a date, sent or stored) to key=.
-    period = CachedServiceField(
+    period = BatchServiceField(
         fetch=fetch_period_status,
         read_only=True,
         derived_from="booked_on",
@@ -88,7 +88,7 @@ class ExpenseSerializer(BatchSerializer):
         fields = ("id", "booked_on", "amount", "category", "period")
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
-        if self.cached("period") == "closed":
+        if self.fetched("period") == "closed":
             raise serializers.ValidationError(
                 {"booked_on": ["The books for this month are closed."]}
             )

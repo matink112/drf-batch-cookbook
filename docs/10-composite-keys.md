@@ -8,7 +8,7 @@ quantity must still be checked against the stored pair. A tuple of names in
 | | |
 |---|---|
 | Domain | `shop` |
-| Options | `derived_from=("warehouse", "product")`, a `CachedServiceField` subclass with `fetch()` |
+| Options | `derived_from=("warehouse", "product")`, a `BatchServiceField` subclass with `fetch()` |
 | Run | `uv run python examples/run.py composite-keys` |
 
 ## Code
@@ -39,7 +39,7 @@ quantity must still be checked against the stored pair. A tuple of names in
 
 ## What to notice
 
-- Each half is the **cached key** of a related field (`"AMS"`, `"AB-1"`), not
+- Each half is the **lookup key** of a related field (`"AMS"`, `"AB-1"`), not
   a model instance: keys are known before any fetch, so `available` does not
   wait for the warehouse or product queries.
 - Because `available` reads `warehouse` and `product`, an update fetches their

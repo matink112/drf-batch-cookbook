@@ -8,7 +8,7 @@ checked against the stored value.
 | | |
 |---|---|
 | Domain | `saas` |
-| Options | `batch_actions=(..., "replace", ...)`, an optional writable `CachedServiceField` |
+| Options | `batch_actions=(..., "replace", ...)`, an optional writable `BatchServiceField` |
 | Run | `uv run python examples/run.py put-replace` |
 
 ## Code
@@ -45,6 +45,6 @@ checked against the stored value.
 
 - `PUT` maps to `batch_replace` (`self.action == "batch_replace"`), so
   permissions and throttles can treat it apart from `PATCH`.
-- The stored-key rule is the same for `PUT` and `PATCH`: a writable cached
+- The stored-key rule is the same for `PUT` and `PATCH`: a writable batch
   field the row leaves out is keyed by its stored value.
 - `perform_batch_replace()` defaults to `perform_batch_update()`.

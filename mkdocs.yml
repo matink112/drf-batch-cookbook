@@ -1,6 +1,6 @@
 site_name: drf-batch cookbook
 site_description: >-
-  Runnable scenarios for drf-batch's cached fields: one option per page, with
+  Runnable scenarios for drf-batch's batch fields: one option per page, with
   the batches it accepts and rejects.
 copyright: BSD-3-Clause
 

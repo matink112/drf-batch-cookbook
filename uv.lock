@@ -261,41 +261,16 @@ wheels = [
 
 [[package]]
 name = "drf-batch"
-source = { editable = "../drf-batch" }
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django", version = "5.2.18", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "djangorestframework" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "django", specifier = ">=5.2" },
-    { name = "djangorestframework", specifier = ">=3.15" },
-    { name = "drf-spectacular", marker = "extra == 'spectacular'", specifier = ">=0.27" },
-]
-provides-extras = ["spectacular"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "commitizen", specifier = ">=4.10" },
-    { name = "django-stubs", specifier = ">=5.0" },
-    { name = "djangorestframework-stubs", specifier = ">=3.16" },
-    { name = "drf-spectacular", specifier = ">=0.27" },
-    { name = "hypothesis", specifier = ">=6.100" },
-    { name = "mypy", specifier = ">=1.14" },
-    { name = "nox", specifier = ">=2024.10" },
-    { name = "pre-commit", specifier = ">=4.0" },
-    { name = "psycopg", extras = ["binary"], specifier = ">=3.2" },
-    { name = "pytest", specifier = ">=8.0" },
-    { name = "pytest-cov", specifier = ">=6.0" },
-    { name = "pytest-django", specifier = ">=4.9" },
-    { name = "ruff", specifier = ">=0.9" },
-]
-docs = [
-    { name = "mkdocs", specifier = ">=1.6,<2" },
-    { name = "mkdocs-material", specifier = ">=9.5" },
-    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.26" },
+sdist = { url = "https://files.pythonhosted.org/packages/c4/53/bcd1bb9c60803f31d44e1e429eef27b63e27702326d513f3dd7118f88154/drf_batch-0.4.0.tar.gz", hash = "sha256:d9069073044063ff25c660f932d4af4ae2b935a7b5557b892e34d589d4a82e43", size = 87211, upload-time = "2026-10-31T14:08:14.282Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/61/d5f19226e7c3ee59506c32dad66384deeb836aed757a0cd3bddd28160e90/drf_batch-0.4.0-py3-none-any.whl", hash = "sha256:84f3817aca683a1ae4aac1390085822667b571efab9a4bc9ea44864f3fc4708b", size = 57222, upload-time = "2026-10-31T14:08:12.992Z" },
 ]
 
 [[package]]
@@ -322,7 +297,7 @@ docs = [
 requires-dist = [
     { name = "django", specifier = ">=5.2" },
     { name = "djangorestframework", specifier = ">=3.15" },
-    { name = "drf-batch", editable = "../drf-batch" },
+    { name = "drf-batch", specifier = ">=0.4.0" },
 ]
 
 [package.metadata.requires-dev]

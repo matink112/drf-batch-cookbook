@@ -51,7 +51,7 @@ column that is not on the serializer**: its value comes from the stored row.
   row (`None` on create), so the client cannot influence it.
 - Any ForeignKey or OneToOneField column works the same way (its value is the
   related pk).
-- A shortcut: a read-only cached field **named after the column** (for
-  example `plan_code = CachedServiceField(..., read_only=True)`) gets the
+- A shortcut: a read-only batch field **named after the column** (for
+  example `plan_code = BatchServiceField(..., read_only=True)`) gets the
   stored key without `derived_from`, but it also renders the column in
   responses.

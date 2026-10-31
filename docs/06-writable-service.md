@@ -8,7 +8,7 @@ a `PATCH` that only touches the quantity.
 | | |
 |---|---|
 | Domain | `shop` |
-| Options | `CachedServiceField(fetch=, error=)`, writable; stored keys (automatic) |
+| Options | `BatchServiceField(fetch=, error=)`, writable; stored keys (automatic) |
 | Run | `uv run python examples/run.py writable-service` |
 
 ## Code

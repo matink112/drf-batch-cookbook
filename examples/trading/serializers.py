@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from drf_batch import BatchSerializer, CachedRelatedField, CachedServiceField
+from drf_batch import BatchRelatedField, BatchSerializer, BatchServiceField
 from rest_framework import serializers
 
 from .models import Order, Ticker
@@ -12,8 +12,8 @@ from .services import CALLS, fetch_bands, fetch_kyc
 # --8<-- [start:order]
 class OrderSerializer(BatchSerializer):
     # Rows send the ISIN, not the pk; a miss uses the error template.
-    ticker = CachedRelatedField(lookup="isin", error="Ticker '{value}' not found.")
-    customer = CachedRelatedField(lookup="isin", error="Customer '{value}' not found.")
+    ticker = BatchRelatedField(lookup="isin", error="Ticker '{value}' not found.")
+    customer = BatchRelatedField(lookup="isin", error="Customer '{value}' not found.")
     volume = serializers.IntegerField(min_value=1)
     reference_id = serializers.CharField(max_length=64)
 
@@ -29,7 +29,7 @@ class OrderSerializer(BatchSerializer):
 class ListedOrderSerializer(OrderSerializer):
     # Never read from the row. The key is the row's ticker: the one it
     # sends, or the stored one on a PATCH that leaves it out.
-    band = CachedServiceField(
+    band = BatchServiceField(
         fetch=fetch_bands,
         read_only=True,
         derived_from="ticker",
@@ -40,7 +40,7 @@ class ListedOrderSerializer(OrderSerializer):
         fields = (*OrderSerializer.Meta.fields, "band")
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
-        band = self.cached("band")  # this row's value, None on a miss
+        band = self.fetched("band")  # this row's value, None on a miss
         if band is None:
             raise serializers.ValidationError({"ticker": ["Ticker is not listed."]})
         if band == "B":
@@ -52,7 +52,7 @@ class ListedOrderSerializer(OrderSerializer):
 
 
 # --8<-- [start:exchange]
-class PrimaryListingField(CachedRelatedField):
+class PrimaryListingField(BatchRelatedField):
     """DB-after-service: only tickers the listing service put in band A."""
 
     def fetch(self, keys: set[Any], collected: dict[str, Any], context: Any) -> Any:
@@ -66,7 +66,7 @@ class PrimaryListingField(CachedRelatedField):
 
 
 class ExchangeOrderSerializer(ListedOrderSerializer):
-    kyc = CachedServiceField(fetch=fetch_kyc, read_only=True, derived_from="customer")
+    kyc = BatchServiceField(fetch=fetch_kyc, read_only=True, derived_from="customer")
     primary_listing = PrimaryListingField(
         model=Ticker,
         lookup="isin",
@@ -80,11 +80,11 @@ class ExchangeOrderSerializer(ListedOrderSerializer):
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         attrs = super().validate(attrs)
-        if self.cached("kyc") != "verified":
+        if self.fetched("kyc") != "verified":
             raise serializers.ValidationError(
                 {"customer": ["Customer is not KYC-verified."]}
             )
-        if self.cached("primary_listing") is None:
+        if self.fetched("primary_listing") is None:
             raise serializers.ValidationError(
                 {"ticker": ["Ticker has no primary listing."]}
             )

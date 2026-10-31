@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from drf_batch import BatchSerializer, CachedRelatedField
+from drf_batch import BatchRelatedField, BatchSerializer
 
 from .models import Book
 
@@ -9,7 +9,7 @@ from .models import Book
 class BookSerializer(BatchSerializer):
     # No options: the model comes from the Book.author ForeignKey, and rows
     # send the author's primary key (a UUID here).
-    author = CachedRelatedField()
+    author = BatchRelatedField()
 
     class Meta:
         model = Book

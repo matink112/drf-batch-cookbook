@@ -1,11 +1,11 @@
 [project]
 name = "drf-batch-cookbook"
 version = "0.1.0"
-description = "Runnable scenarios for drf-batch's cached fields, one docs page each."
+description = "Runnable scenarios for drf-batch's batch fields, one docs page each."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "drf-batch",
+    "drf-batch>=0.4.0",
     "Django>=5.2",
     "djangorestframework>=3.15",
 ]
@@ -19,12 +19,6 @@ docs = [
 
 [tool.uv]
 package = false
-
-## The scenarios use drf-batch features that are not released yet (derived_from,
-## key=, BatchSerializer.cached): build against the sibling checkout. Switch to
-## a released version (or a git source) once they are published.
-#[tool.uv.sources]
-#drf-batch = { path = "../drf-batch", editable = true }
 
 [tool.ruff]
 line-length = 88

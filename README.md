@@ -2,7 +2,7 @@
 
 Runnable scenarios for [drf-batch](https://github.com/matink112/drf-batch):
 19 scenarios across six small domains, each focused on one or two
-cached-field options, with a docs page per scenario.
+batch-field options, with a docs page per scenario.
 
 ```bash
 uv sync
@@ -36,10 +36,8 @@ retry example, which opts out.
 
 ## drf-batch version
 
-The scenarios use features that are not released yet (`derived_from`, `key=`,
-`BatchSerializer.cached`), so `pyproject.toml` installs drf-batch from the
-sibling checkout `../drf-batch`. Point `[tool.uv.sources]` at a release (or a
-git URL) once they are published.
+The scenarios need drf-batch 0.4.0 or later (`derived_from`, `key=`,
+`BatchSerializer.fetched`), installed from PyPI.
 
 ## Checks
 
